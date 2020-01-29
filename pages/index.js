@@ -8,21 +8,25 @@ function fetcher(url) {
 export default function Index() {
   const { query } = useRouter();
   const { data, error } = useSWR(
-    `/api/randomQuote${query.author ? "?author=" + query.author : ""}`,
+    `/api/allKatakana${
+      query.romanization ? "?romanization=" + query.romanization : ""
+    }`,
     fetcher
   );
   // The following line has optional chaining, added in Next.js v9.1.5,
   // is the same as `data && data.author`
-  const author = data?.author;
-  let quote = data?.quote;
-
-  if (!data) quote = "Loading...";
-  if (error) quote = "Failed to fetch the quote.";
+  const romanization = data && data[0].romanization;
+  let character = data && data[0].character;
+  console.log(data);
+  console.log(romanization);
+  console.log(character);
+  if (!data) character = "Loading...";
+  if (error) character = "Failed to fetch";
 
   return (
     <main className="center">
-      <div className="quote">{quote}</div>
-      {author && <span className="author">- {author}</span>}
+      <div className="character">{character}</div>
+      {/* {author && <span className="author">- {author}</span>} */}
 
       <style jsx>{`
         main {
@@ -31,7 +35,7 @@ export default function Index() {
           margin: 300px auto;
           text-align: center;
         }
-        .quote {
+        .character {
           font-family: cursive;
           color: #e243de;
           font-size: 24px;
