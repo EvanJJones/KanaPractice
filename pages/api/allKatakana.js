@@ -6,11 +6,11 @@ export default (req, res) => {
 
   // console.log(katakana);
   // console.log(romanization);
-  if (romanization) {
+  /* if (romanization) {
     katakana = katakana.filter(katakana =>
       katakana.romanization.toLowerCase().includes(romanization.toLowerCase())
     );
-  }
+  } */
   if (!katakana.length) {
     katakana = "not Found";
   }

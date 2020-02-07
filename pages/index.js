@@ -6,28 +6,35 @@ function fetcher(url) {
 }
 
 export default function Index() {
-  const { query } = useRouter();
-  const { data, error } = useSWR(
-    `/api/allKatakana${
-      query.romanization ? "?romanization=" + query.romanization : ""
-    }`,
-    fetcher
-  );
+  // const { query } = useRouter();
+  const { data, error } = useSWR(`/api/allKatakana`, fetcher);
   // The following line has optional chaining, added in Next.js v9.1.5,
   // is the same as `data && data.author`
   const romanization = data && data[0].romanization;
   let character = data && data[0].character;
-  console.log(data);
-  console.log(romanization);
-  console.log(character);
-  if (!data) character = "Loading...";
-  if (error) character = "Failed to fetch";
+  let allKana = data;
+  // console.log(query);
+  // console.log(romanization);
+  // console.log(character);
+  if (!data) allKana = false;
+  if (error) allKana = false;
+  let currentChar = false;
+
+  if (allKana) {
+    const rand = Math.floor(Math.random() * allKana.length);
+    currentChar = allKana[rand];
+    console.log(currentChar);
+  }
 
   return (
     <main className="center">
-      <div className="character">{character}</div>
-      {/* {author && <span className="author">- {author}</span>} */}
+      {/* {allKana ? (
+        allKana.map(kana => <div key={kana.char_id}>{kana.character}</div>)
+      ) : (
+        <div>loading...</div>
+      )} */}
 
+      {currentChar ? <div>{currentChar.character}</div> : <div>error</div>}
       <style jsx>{`
         main {
           width: 90%;
