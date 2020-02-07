@@ -1,11 +1,15 @@
 import { useRouter } from "next/router";
+import React, { useState } from "react";
 import useSWR from "swr";
 
 function fetcher(url) {
   return fetch(url).then(r => r.json());
 }
 
-export default function Index() {
+function Index(props) {
+  const [currentChar, setCurrentChar] = useState();
+  const [count, setCount] = useState(0);
+
   // const { query } = useRouter();
   const { data, error } = useSWR(`/api/allKatakana`, fetcher);
   // The following line has optional chaining, added in Next.js v9.1.5,
@@ -13,17 +17,21 @@ export default function Index() {
   const romanization = data && data[0].romanization;
   let character = data && data[0].character;
   let allKana = data;
+
   // console.log(query);
   // console.log(romanization);
   // console.log(character);
   if (!data) allKana = false;
   if (error) allKana = false;
-  let currentChar = false;
 
-  if (allKana) {
-    const rand = Math.floor(Math.random() * allKana.length);
-    currentChar = allKana[rand];
-    console.log(currentChar);
+  function nextCharacter(allKana) {
+    setCount(count + 1);
+    console.log(count);
+    let rand = Math.floor(Math.random() * allKana.length);
+    const newChar = allKana[rand];
+    allKana.splice(rand, 1);
+    console.log(newChar);
+    setCurrentChar(newChar);
   }
 
   return (
@@ -34,13 +42,17 @@ export default function Index() {
         <div>loading...</div>
       )} */}
 
-      {currentChar ? <div>{currentChar.character}</div> : <div>error</div>}
+      {currentChar ? (
+        <div id="main" onClick={() => nextCharacter(allKana)}>
+          {currentChar.character}
+        </div>
+      ) : (
+        <div onClick={() => nextCharacter(allKana)}>error</div>
+      )}
       <style jsx>{`
         main {
-          width: 90%;
-          max-width: 900px;
-          margin: 300px auto;
           text-align: center;
+          font-size: 250px;
         }
         .character {
           font-family: cursive;
@@ -57,3 +69,5 @@ export default function Index() {
     </main>
   );
 }
+
+export default Index;
