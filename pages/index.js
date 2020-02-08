@@ -1,30 +1,29 @@
 import React, { useState } from "react";
 import useSWR from "swr";
+import fetch from "isomorphic-unfetch";
 
 function fetcher(url) {
   return fetch(url).then(r => r.json());
 }
-
 function Index(props) {
   const [currentChar, setCurrentChar] = useState();
   const [allKana, setAllKana] = useState();
   const [count, setCount] = useState(0);
   const [input, setInput] = useState("");
 
-  // const { query } = useRouter();
-  const { data, error } = useSWR(`/api/allKatakana`, fetcher);
-
-  // let allKana = data;
-
-  // console.log(query);
-  // console.log(romanization);
-  // console.log(character);
-  /*   if (!data) allKana = false;
-  if (error) allKana = false; */
+  const initialData = props.data;
 
   function startGame() {
-    setAllKana(data);
-    nextCharacter();
+    // nextCharacter();
+
+    setCount(count + 1);
+    console.log(count);
+    let rand = Math.floor(Math.random() * initialData.length);
+    const newChar = initialData[rand];
+    initialData.splice(rand, 1);
+    console.log(newChar);
+    setCurrentChar(newChar);
+    setAllKana(initialData);
   }
 
   function nextCharacter() {
@@ -51,13 +50,6 @@ function Index(props) {
       ) : (
         <div>loading...</div>
       )} */}
-
-      {data ? (
-        <div onClick={() => startGame()}>Click to start</div>
-      ) : (
-        <div>loading</div>
-      )}
-
       {currentChar ? (
         <div id="main" onClick={() => nextCharacter(allKana)}>
           {currentChar.character}
@@ -95,5 +87,12 @@ function Index(props) {
     </main>
   );
 }
+
+Index.getInitialProps = async () => {
+  const data = await fetcher(
+    "https://kana-practice-dyescbe7b.now.sh/api/allKatakana"
+  );
+  return { data };
+};
 
 export default Index;
