@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import useSWR from "swr";
 import fetch from "isomorphic-unfetch";
 
+import Options from "../components/Options";
+
 function fetcher(url) {
   return fetch(url).then(r => r.json());
 }
@@ -15,6 +17,7 @@ function Index(props) {
   const initialData = props.data;
 
   function startGame() {
+    // sets basics for the game, initializes options
     // nextCharacter();
 
     setCount(count + 1);
@@ -22,7 +25,6 @@ function Index(props) {
     let rand = Math.floor(Math.random() * initialData.length);
     const newChar = initialData[rand];
     initialData.splice(rand, 1);
-    console.log(newChar);
     setCurrentChar(newChar);
     setAllKana(initialData);
   }
@@ -39,16 +41,20 @@ function Index(props) {
 
   function checkAnswer(event) {
     event.preventDefault();
+    // correct answer
     if (currentChar.romanization === input.toLowerCase()) {
       setInput("");
       console.log("correct");
       setScore(score + 1);
       nextCharacter();
+    } else {
+      // what happens if incorrect answer
     }
   }
 
   return (
     <main className="center">
+      <Options />
       {/* {allKana ? (
         allKana.map(kana => <div key={kana.char_id}>{kana.character}</div>)
       ) : (
@@ -78,7 +84,6 @@ function Index(props) {
       <style jsx>{`
         main {
           text-align: center;
-          font-size: 250px;
         }
         .character {
           font-family: cursive;
