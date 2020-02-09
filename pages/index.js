@@ -9,6 +9,7 @@ function Index(props) {
   const [currentChar, setCurrentChar] = useState();
   const [allKana, setAllKana] = useState();
   const [count, setCount] = useState(0);
+  const [score, setScore] = useState(0);
   const [input, setInput] = useState("");
 
   const initialData = props.data;
@@ -36,9 +37,12 @@ function Index(props) {
     setCurrentChar(newChar);
   }
 
-  function checkAnswer() {
+  function checkAnswer(event) {
+    event.preventDefault();
     if (currentChar.romanization === input.toLowerCase()) {
+      setInput("");
       console.log("correct");
+      setScore(score + 1);
       nextCharacter();
     }
   }
@@ -58,15 +62,19 @@ function Index(props) {
         <div onClick={() => startGame()}>Click to start</div>
       )}
 
-      <input
-        className="form-control"
-        type="text"
-        placeholder="Enter Romanization"
-        name="Input"
-        onChange={e => setInput(e.target.value)}
-      />
+      <div className="score">{score}</div>
 
-      <button onClick={() => checkAnswer()}>Search</button>
+      <form onSubmit={checkAnswer}>
+        <input
+          className="form-control"
+          type="text"
+          placeholder="Enter Romanization"
+          name="Input"
+          value={input}
+          onChange={e => setInput(e.target.value)}
+        />
+        <button type="submit">Submit</button>
+      </form>
       <style jsx>{`
         main {
           text-align: center;
@@ -83,6 +91,9 @@ function Index(props) {
           color: #559834;
           font-size: 20px;
         }
+        .score {
+          font-size: 20px;
+        }
       `}</style>
     </main>
   );
@@ -90,7 +101,8 @@ function Index(props) {
 
 Index.getInitialProps = async () => {
   const data = await fetcher(
-    "https://kana-practice-dyescbe7b.now.sh/api/allKatakana"
+    // "https://kana-practice-dyescbe7b.now.sh/api/allKatakana"
+    "http://localhost:3000/api/allKatakana"
   );
   return { data };
 };
