@@ -1,5 +1,5 @@
 import Checkbox from "./Checkbox";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Options = props => {
   const [checkedItems, setCheckedItems] = useState({
@@ -10,12 +10,14 @@ const Options = props => {
 
   const handleChange = event => {
     // updating an object instead of a Map
-    setCheckedItems({
+    const updateObject = {
       ...checkedItems,
       [event.target.name]: event.target.checked
-    });
+    };
+    setCheckedItems(updateObject);
     console.log(checkedItems);
-    props.callBack(checkedItems);
+    const toSend = checkedItems;
+    props.callBack(updateObject);
   };
 
   const checkboxes = [

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useSWR from "swr";
 import fetch from "isomorphic-unfetch";
 
@@ -13,26 +13,36 @@ function Index(props) {
   const [count, setCount] = useState(0);
   const [score, setScore] = useState(0);
   const [input, setInput] = useState("");
-  const [options, setOptions] = useState({
-    Basic: true,
-    Voiced: true,
-    Combo: true
-  });
+  const [options, setOptions] = useState({});
 
   const initialData = props.data;
 
-  function startGame() {
+  const startGame = () => {
     // sets basics for the game, initializes options
     // nextCharacter();
+    console.log(options);
+    // filter based on checkboxes
+    const filteredKana = initialData.filter(kana => {
+      if (options.Basic === false && kana.type === "basic") {
+        return false;
+      }
+      if (options.Voiced === false && kana.type === "voiced") {
+        return false;
+      }
+      if (options.Combo === false && kana.type === "combo") {
+        return false;
+      }
+      return true;
+    });
 
     setCount(count + 1);
     console.log(count);
-    let rand = Math.floor(Math.random() * initialData.length);
-    const newChar = initialData[rand];
-    initialData.splice(rand, 1);
+    let rand = Math.floor(Math.random() * filteredKana.length);
+    const newChar = filteredKana[rand];
+    filteredKana.splice(rand, 1);
     setCurrentChar(newChar);
-    setAllKana(initialData);
-  }
+    setAllKana(filteredKana);
+  };
 
   function nextCharacter() {
     setCount(count + 1);
@@ -58,13 +68,14 @@ function Index(props) {
   }
 
   function optionCallBack(childOptions) {
+    console.log(childOptions);
     setOptions(childOptions);
     console.log(options);
   }
 
   return (
     <main className="center">
-      <Options callBack={childOptions => optionCallBack()} />
+      <Options callBack={optionCallBack} />
       {/* {allKana ? (
         allKana.map(kana => <div key={kana.char_id}>{kana.character}</div>)
       ) : (
