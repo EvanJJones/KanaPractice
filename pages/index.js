@@ -13,6 +13,11 @@ function Index(props) {
   const [count, setCount] = useState(0);
   const [score, setScore] = useState(0);
   const [input, setInput] = useState("");
+  const [options, setOptions] = useState({
+    Basic: true,
+    Voiced: true,
+    Combo: true
+  });
 
   const initialData = props.data;
 
@@ -52,18 +57,21 @@ function Index(props) {
     }
   }
 
+  function optionCallBack(childOptions) {
+    setOptions(childOptions);
+    console.log(options);
+  }
+
   return (
     <main className="center">
-      <Options />
+      <Options callBack={childOptions => optionCallBack()} />
       {/* {allKana ? (
         allKana.map(kana => <div key={kana.char_id}>{kana.character}</div>)
       ) : (
         <div>loading...</div>
       )} */}
       {currentChar ? (
-        <div id="main" onClick={() => nextCharacter(allKana)}>
-          {currentChar.character}
-        </div>
+        <div id="main">{currentChar.character}</div>
       ) : (
         <div onClick={() => startGame()}>Click to start</div>
       )}

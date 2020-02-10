@@ -1,7 +1,7 @@
 import Checkbox from "./Checkbox";
 import React, { useState } from "react";
 
-const Options = () => {
+const Options = props => {
   const [checkedItems, setCheckedItems] = useState({
     Basic: true,
     Voiced: true,
@@ -15,6 +15,7 @@ const Options = () => {
       [event.target.name]: event.target.checked
     });
     console.log(checkedItems);
+    props.callBack(checkedItems);
   };
 
   const checkboxes = [
