@@ -264,18 +264,6 @@
     "type": "basic"
   },
   {
-    "char_id": "wi",
-    "character": "ヰ",
-    "romanization": "wi",
-    "type": "basic"
-  },
-  {
-    "char_id": "we",
-    "character": "ヱ",
-    "romanization": "we",
-    "type": "basic"
-  },
-  {
     "char_id": "wo",
     "character": "ヲ",
     "romanization": "wo",
@@ -637,7 +625,7 @@
   },
   {
     "char_id": "byo",
-    "character": "ヒョ",
+    "character": "ビョ",
     "romanization": "byo",
     "type": "combo"
   },
