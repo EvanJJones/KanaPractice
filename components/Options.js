@@ -8,6 +8,8 @@ const Options = props => {
     Combo: true
   }); //plain object as state
 
+  const [length, setLength] = useState(30);
+
   const handleChange = event => {
     // updating an object instead of a Map
     const updateObject = {
@@ -50,6 +52,14 @@ const Options = props => {
           />
         </label>
       ))}
+      Game Length
+      <input
+        className="form-control"
+        type="text"
+        name="Game Length"
+        value={length}
+        onChange={e => setInput(e.target.value)}
+      />
     </div>
   );
 };

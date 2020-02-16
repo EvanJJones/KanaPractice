@@ -68,19 +68,13 @@ function Index(props) {
   }
 
   function optionCallBack(childOptions) {
-    console.log(childOptions);
     setOptions(childOptions);
-    console.log(options);
   }
 
   return (
     <main className="center">
       <Options callBack={optionCallBack} />
-      {/* {allKana ? (
-        allKana.map(kana => <div key={kana.char_id}>{kana.character}</div>)
-      ) : (
-        <div>loading...</div>
-      )} */}
+
       {currentChar ? (
         <div id="main">{currentChar.character}</div>
       ) : (
